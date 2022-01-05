@@ -6,26 +6,24 @@ const refs = {
   input: document.querySelector('.feedback-form input'),
   textarea: document.querySelector('.feedback-form textarea'),
 };
-console.log(refs.form);
-console.log(refs.input);
-console.log(refs.textarea);
 ///
 refs.form.addEventListener('submit', onFormSubmit);
 refs.input.addEventListener('input', throttle(onEmailInput, 500)); //added library Lodesh
 refs.textarea.addEventListener('input', throttle(onTextareaInput, 500)); //added library Lodesh
 //
 populateTextarea();
+populateEmail();
 function onFormSubmit(e) {
   e.preventDefault(); //чтобы не перезагружалась страничка
   e.target.reset(); //чистит форму после отправки
-  localStorage.removeItem(LOCAL_KEY_MESSAGE);
+  localStorage.removeItem(LOCAL_KEY_MESSAGE); //чистим localStorage
   localStorage.removeItem(LOCAL_KEY_EMAIL);
 }
 //
 function onTextareaInput(e) {
   const message = e.target.value;
   console.log(message);
-  localStorage.setItem(LOCAL_KEY_MESSAGE, JSON.stringify({ message }));
+  localStorage.setItem(LOCAL_KEY_MESSAGE, message);
 }
 //
 
@@ -33,13 +31,20 @@ function onTextareaInput(e) {
 function onEmailInput(e) {
   const email = e.target.value;
   console.log(email);
-  localStorage.setItem(LOCAL_KEY_EMAIL, JSON.stringify({ email }));
+  localStorage.setItem(LOCAL_KEY_EMAIL, email);
 }
 
-function populateTextarea(e) {
-  savedMessage = localStorage.getItem(LOCAL_KEY_MESSAGE);
+function populateTextarea() {
+  const savedMessage = localStorage.getItem(LOCAL_KEY_MESSAGE);
   if (savedMessage) {
     console.log(savedMessage);
     refs.textarea.value = savedMessage;
+  }
+}
+function populateEmail() {
+  const savedEmail = localStorage.getItem(LOCAL_KEY_EMAIL);
+  if (savedEmail) {
+    console.log(savedEmail);
+    refs.input.value = savedEmail;
   }
 }
